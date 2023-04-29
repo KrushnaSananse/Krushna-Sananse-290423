@@ -1,3 +1,4 @@
+CREATE SEQUENCE CUSTOMER_SEQ START WITH 5 INCREMENT BY 1;
 CREATE TABLE customer (
 	id BIGINT not null,
 	first_name varchar(100) not null,

@@ -32,4 +32,8 @@ public class CustomerService {
 	public List<Customer> findByMobileNumber(String mobileNumber) {
 	    return customerdao.findByMobileNumber(mobileNumber);
 	}
+	
+	public Customer addCustomer(Customer customer) {
+		return customerdao.save(customer);
+	}
 }
