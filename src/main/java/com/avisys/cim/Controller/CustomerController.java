@@ -1,7 +1,5 @@
 package com.avisys.cim.Controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +20,6 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@SuppressWarnings("unchecked")
 	@GetMapping("/getCustomerInformation/{filter}")
 	/**
 	 * This is the rest api call which is giving us the information of the customers based on the filter provided
@@ -49,7 +46,7 @@ public class CustomerController {
 				customerInfo = customerService.findByMobileNumber(paramValue);
 			}	
 		}
-		if(customerInfo==null || ((List<Customer>) customerInfo).size()==0) {
+		if(customerInfo==null) {
 			return "No record found with given criteria, Filter should be in [all / firstName=value / lastName=value / mobileNumber=value]";
 		}
 		return customerInfo;
@@ -64,13 +61,13 @@ public class CustomerController {
 	 */
 	@PostMapping("/addCustomer")
 	public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
-		List<Customer> existingCustomer = customerService.findByMobileNumber(customer.getMobileNumber());
-		if(existingCustomer != null && existingCustomer.size()>0) {
+		boolean isCustomerPresent = customerService.isMobileNumberPresent(customer.getMobileNumber());
+		if(isCustomerPresent) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unable to create Customer. Mobile number already present.");
 		}else {
 			customerService.addCustomer(customer);
 			return ResponseEntity.ok(customer);
 		}
-		
+
 	}
 }
