@@ -70,4 +70,19 @@ public class CustomerService {
 	public Customer addCustomer(Customer customer) {
 		return customerdao.save(customer);
 	}
+
+	public void deleteCustomer(String mobileNumber) {
+		Customer customer = customerdao.findByMobileNumber(mobileNumber);
+		if(customer != null) {
+			customerdao.delete(customer);
+		}else {
+			customer = customerdao.findByMobileNumberContaining(mobileNumber);
+			if(customer != null) {
+				customerdao.delete(customer);
+			}
+			else {
+				System.out.println("Customer with given mobile is not present");
+			}
+		}
+	}
 }
