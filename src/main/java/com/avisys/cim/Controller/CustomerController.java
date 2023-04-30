@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -96,5 +97,21 @@ public class CustomerController {
 	public ResponseEntity<?> deleteMapping(@RequestParam("mobileNumber") String mobileNumber){
 		customerService.deleteCustomer(mobileNumber);
 		return ResponseEntity.ok("Customer deleted Successfully.");
+	}
+
+	/**
+	 * This is RestAPI to update the existing customer's mobile number
+	 * 
+	 * @param mobileNumber			Input - customers mobile number to be found in database
+	 * 
+	 * @param updatedMobileNumber	Input - customers mobile number to be updated in database
+	 * 
+	 * @return						Returns object of Response Entity
+	 */
+	@PutMapping("/updateMobileNumber")
+	public ResponseEntity<?> updateCustomer(@RequestParam String mobileNumber,
+			@RequestParam String updatedMobileNumber){
+		customerService.updateCustomer(mobileNumber, updatedMobileNumber);
+		return ResponseEntity.ok("Customer updated Successfully");
 	}
 }

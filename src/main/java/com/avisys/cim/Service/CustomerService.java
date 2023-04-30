@@ -85,4 +85,17 @@ public class CustomerService {
 			}
 		}
 	}
+
+	public Customer updateCustomer(String mobileNumber, String updatedMobileNumber) {
+		Customer customer = customerdao.findByMobileNumber(mobileNumber);
+		if(customer != null) {
+			customer.setMobileNumber(updatedMobileNumber);
+		}else {
+			customer = customerdao.findByMobileNumberContaining(mobileNumber);
+			if(customer != null) {
+				customer.setMobileNumber(updatedMobileNumber);
+			}
+		}
+		return customer;
+	}
 }
