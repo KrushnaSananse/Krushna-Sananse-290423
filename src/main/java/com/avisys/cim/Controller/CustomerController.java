@@ -1,5 +1,7 @@
 package com.avisys.cim.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
+	@SuppressWarnings("unchecked")
 	@GetMapping("/getCustomerInformation/{filter}")
 	/**
 	 * This is the rest api call which is giving us the information of the customers based on the filter provided
@@ -33,6 +36,9 @@ public class CustomerController {
 			customerInfo = customerService.findAll();
 		}
 		else {
+			if(filter.split("=").length == 1) {
+				return "Please Specify the filter key=value properly";
+			}
 			String paramKey = filter.split("=")[0];
 			String paramValue = filter.split("=")[1];
 
@@ -46,9 +52,16 @@ public class CustomerController {
 				customerInfo = customerService.findByMobileNumber(paramValue);
 			}	
 		}
-		if(customerInfo==null) {
-			return "No record found with given criteria, Filter should be in [all / firstName=value / lastName=value / mobileNumber=value]";
+		if(customerInfo instanceof Customer) {
+			if(customerInfo==null) {
+				return "No record found with given criteria, Filter should be in [all / firstName=value / lastName=value / mobileNumber=value]";
+			}
+		}else {
+			if(customerInfo == null || ((List<Customer>) customerInfo).size()==0) {
+				return "No record found with given criteria, Filter should be in [all / firstName=value / lastName=value / mobileNumber=value]";
+			}
 		}
+
 		return customerInfo;
 	}
 
@@ -68,6 +81,5 @@ public class CustomerController {
 			customerService.addCustomer(customer);
 			return ResponseEntity.ok(customer);
 		}
-
 	}
 }
